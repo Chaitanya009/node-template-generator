@@ -12,3 +12,17 @@ Create node project
 ```sh
 $ node-template-cli create
 ```
+
+## App Info
+
+### Author
+
+Chaitanya Thakre
+
+### Version
+
+1.0.0
+
+### License
+
+This project is licensed under the MIT License
