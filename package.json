@@ -1,7 +1,7 @@
 {
-  "name": "node-generator-cli",
+  "name": "node-template-cli",
   "version": "1.0.0",
-  "description": "Node Project Generator cli",
+  "description": "A command line tool to generate node.js project",
   "main": "index.js",
   "preferGlobal": true,
   "bin": "./commands.js",
@@ -10,6 +10,10 @@
   },
   "author": "Chaitanya Thakre",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Chaitanya009/node-template-generator"
+  },
   "dependencies": {
     "commander": "^3.0.2",
     "inquirer": "^7.0.0"
