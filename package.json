@@ -1,0 +1,17 @@
+{
+  "name": "node-generator-cli",
+  "version": "1.0.0",
+  "description": "Node Project Generator cli",
+  "main": "index.js",
+  "preferGlobal": true,
+  "bin": "./commands.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Chaitanya Thakre",
+  "license": "MIT",
+  "dependencies": {
+    "commander": "^3.0.2",
+    "inquirer": "^7.0.0"
+  }
+}
