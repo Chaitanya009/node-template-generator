@@ -6,8 +6,8 @@ const fs = require('fs')
 const dir = './node-template';
 
 program
-    .version('1.0.0')
-    .description('Node template generator')
+    .version('1.0.3')
+    .description('A command line tool to generate node.js template')
 
 program
     .command('create')
@@ -22,13 +22,38 @@ program
             await writeFile('node-template/index.js', `
 const express = require('express')
 const app = express()
+const bodyParser = require('body-parser')
 const port = 3000
 
-app.get('/', (req, res) => res.send('Hello World!'))
+app.use(bodyParser.json()); // for parsing application/json
+app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
+
+const allowCrossDomain = function (req, res, next) {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'Origin, Content-Type, Authorization, Accept,Content-Length, X-Requested-With, X-PINGOTHER');
+    if ('OPTIONS' === req.method) {
+        res.sendStatus(200);
+    } else {
+        next();
+    }
+};
+app.use(allowCrossDomain);
+
+require('./route')(app)
 
 app.listen(port, () => console.log('Example app listening on port 3000'))
                     `)
             console.log('index.js created')
+
+            // create route.json
+            await writeFile('node-template/route.js', `
+module.exports = (app) => {
+
+    app.get('/', (req, res) => res.send('Hello World!'))
+}      
+            `)
+            console.log('route.js created')
 
             // create package.json
             await writeFile('node-template/package.json', `
