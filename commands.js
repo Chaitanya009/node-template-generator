@@ -32,7 +32,7 @@ program
             await util.writeFile('node-template/package.json', files.package)
             // console.log('package.json created')
 
-            console.log('Node js project created')
+            console.log('Template created')
         }
         
     })
