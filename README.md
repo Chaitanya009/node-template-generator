@@ -8,7 +8,7 @@ $ npm install -g node-template-cli
 
 ## Commands
 
-Create node project
+Create new project
 ```sh
 $ node-template-cli create
 ```

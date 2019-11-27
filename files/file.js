@@ -4,6 +4,9 @@ const app = express()
 const bodyParser = require('body-parser')
 const port = 3000
 
+// connection with db
+require('./db/connection')
+
 app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 
@@ -42,13 +45,31 @@ const package =
     "author": "",
     "license": "ISC",
     "dependencies": {
-        "express": "^4.17.1"
+        "express": "^4.17.1",
+        "mongoose": "^5.6.9"
     }
 }`
+
+const connection = 
+`const mongoose = require('mongoose')
+
+const uri = 'mongodb://localhost:27017/test'
+
+mongoose.connect(uri, function (err) {
+    if (err) {
+        console.log('Some problem with the connection ' + err)
+    }
+    else {
+        console.log('connected to db')
+    }
+})
+
+exports.module = mongoose`
 
 
 module.exports = {
     index,
     route,
-    package
+    package,
+    connection
 }

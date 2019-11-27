@@ -5,10 +5,10 @@ const fs = require('fs')
 const files = require('./files/file')
 const util = require('./utils/utility')
 
-const dir = './node-template';
+const dir_name = 'node-template';
 
 program
-    .version('1.0.3')
+    .version('1.0.4')
     .description('A command line tool to generate node.js template')
 
 program
@@ -16,21 +16,24 @@ program
     .alias('c')
     .description('create project')
     .action(async () => {
-        if (!fs.existsSync(dir)){
-            await fs.mkdirSync(dir);
+        if (!fs.existsSync(`./${dir_name}`)){
+            await fs.mkdirSync(`./${dir_name}`);
             // console.log('folder created')
 
             // create index.js
-            await util.writeFile('node-template/index.js', files.index)
-            // console.log('index.js created')
+            await util.writeFile(`${dir_name}/index.js`, files.index)
 
             // create route.json
-            await util.writeFile('node-template/route.js', files.route)
-            // console.log('route.js created')
+            await util.writeFile(`${dir_name}/route.js`, files.route)
 
             // create package.json
-            await util.writeFile('node-template/package.json', files.package)
-            // console.log('package.json created')
+            await util.writeFile(`${dir_name}/package.json`, files.package)
+
+            // create db folder
+            await util.makeDir(`${dir_name}/db`);
+
+            // create connection.js file inside db folder
+            await util.writeFile(`${dir_name}/db/connection.js`, files.connection)
 
             console.log('Template created')
         }

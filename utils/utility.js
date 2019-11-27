@@ -3,22 +3,20 @@ const fs = require('fs')
 const writeFile = (file, data) => {
     return new Promise((resolve, reject) => {
         fs.writeFile(file, data, (err) => {
-            if(err) reject(err)
-            else resolve('file created')
+            err ? reject(err) : resolve('file created')
         })
     })
 }
 
-// const makeDir = () => {
-//     return new Promise((resolve, reject) => {
-//         fs.mkdirSync('./node-template', 
-//         (err) => {
-//             if(err) reject(err)
-//             else resolve('folder created')
-//         })
-//     })
-// }
+const makeDir = (dir_name) => {
+    return new Promise((resolve, reject) => {
+        fs.mkdir(dir_name, { recursive: true }, (err) => {
+            err ? reject(err) : resolve('folder created')
+        })
+    })
+}
 
 module.exports = {
-    writeFile
+    writeFile,
+    makeDir
 }
