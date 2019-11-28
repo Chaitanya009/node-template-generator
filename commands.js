@@ -29,6 +29,9 @@ program
             // create package.json
             await util.writeFile(`${dir_name}/package.json`, files.package)
 
+            // create .env
+            await util.writeFile(`${dir_name}/.env`, files.env)
+
             // create db folder
             await util.makeDir(`${dir_name}/db`);
 

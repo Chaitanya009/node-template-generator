@@ -46,16 +46,17 @@ const package =
     "license": "ISC",
     "dependencies": {
         "express": "^4.17.1",
-        "mongoose": "^5.6.9"
+        "mongoose": "^5.6.9",
+        "dotenv": "^8.1.0"
     }
 }`
 
 const connection = 
 `const mongoose = require('mongoose')
+require('dotenv').config()
+const uri = process.env.DB_URL
 
-const uri = 'mongodb://localhost:27017/test'
-
-mongoose.connect(uri, function (err) {
+mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true }, (err) => {
     if (err) {
         console.log('Some problem with the connection ' + err)
     }
@@ -66,10 +67,14 @@ mongoose.connect(uri, function (err) {
 
 exports.module = mongoose`
 
+const env = 
+`DB_URL=mongodb://localhost:27017/test`
+
 
 module.exports = {
     index,
     route,
     package,
-    connection
+    connection,
+    env
 }
