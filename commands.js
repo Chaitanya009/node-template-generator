@@ -23,6 +23,9 @@ program
             // create index.js
             await util.writeFile(`${dir_name}/index.js`, files.index)
 
+            // create app.js
+            await util.writeFile(`${dir_name}/app.js`, files.app)
+
             // create route.json
             await util.writeFile(`${dir_name}/route.js`, files.route)
 
