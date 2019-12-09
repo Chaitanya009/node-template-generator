@@ -5,17 +5,17 @@ const fs = require('fs')
 const files = require('./files/file')
 const util = require('./utils/utility')
 
-const dir_name = 'node-template';
+// const dir_name = 'node-template';
 
 program
     .version('1.0.4')
     .description('A command line tool to generate node.js template')
 
 program
-    .command('create')
+    .command('create <dir_name>')
     .alias('c')
     .description('create project')
-    .action(async () => {
+    .action(async (dir_name) => {
         if (!fs.existsSync(`./${dir_name}`)){
             await fs.mkdirSync(`./${dir_name}`);
             // console.log('folder created')
@@ -30,7 +30,7 @@ program
             await util.writeFile(`${dir_name}/route.js`, files.route)
 
             // create package.json
-            await util.writeFile(`${dir_name}/package.json`, files.package)
+            await util.writeFile(`${dir_name}/package.json`, files.createPackageJson(dir_name))
 
             // create .env
             await util.writeFile(`${dir_name}/.env`, files.env)
@@ -60,6 +60,8 @@ program
             await util.writeFile(`${dir_name}/db/controller/user_ctrl.js`, files.connection)
 
             console.log('Template created')
+        } else {
+            console.log(`${dir_name} already exists`)
         }
         
     })

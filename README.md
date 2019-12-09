@@ -10,7 +10,7 @@ $ npm install -g node-template-cli
 
 Create new project
 ```sh
-$ node-template-cli create
+$ node-template-cli create <app_name>
 ```
 
 ## App Info
@@ -21,7 +21,7 @@ Chaitanya Thakre
 
 ### Version
 
-1.0.7
+1.0.8
 
 ### License
 

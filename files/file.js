@@ -18,25 +18,6 @@ module.exports = (app) => {
     app.get('/user/:_id', user_ctrl.get_user)
 }`
 
-const package = 
-`{
-    "name": "test",
-    "version": "1.0.0",
-    "description": "",
-    "main": "index.js",
-    "scripts": {
-        "start": "node index.js",
-        "test": "echo 'Error: no test specified' && exit 1"
-    },
-    "author": "",
-    "license": "ISC",
-    "dependencies": {
-        "express": "^4.17.1",
-        "mongoose": "^5.6.9",
-        "dotenv": "^8.1.0"
-    }
-}`
-
 const connection = 
 `const mongoose = require('mongoose')
 require('dotenv').config()
@@ -152,6 +133,26 @@ module.exports = {
 const env = 
 `DB_URL=mongodb://localhost:27017/test`
 
+const createPackageJson = (app_name) => {
+    return `{
+        "name": "${app_name}",
+        "version": "1.0.0",
+        "description": "",
+        "main": "index.js",
+        "scripts": {
+            "start": "node index.js",
+            "test": "echo 'Error: no test specified' && exit 1"
+        },
+        "author": "",
+        "license": "ISC",
+        "dependencies": {
+            "express": "^4.17.1",
+            "mongoose": "^5.6.9",
+            "dotenv": "^8.1.0"
+        }
+    }`
+}
+
 
 module.exports = {
     index,
@@ -162,5 +163,6 @@ module.exports = {
     user_service,
     user_ctrl,
     app,
-    env
+    env,
+    createPackageJson
 }
