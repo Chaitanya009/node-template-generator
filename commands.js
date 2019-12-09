@@ -36,10 +36,28 @@ program
             await util.writeFile(`${dir_name}/.env`, files.env)
 
             // create db folder
-            await util.makeDir(`${dir_name}/db`);
+            await util.makeDir(`${dir_name}/db`)
 
             // create connection.js file inside db folder
             await util.writeFile(`${dir_name}/db/connection.js`, files.connection)
+
+            // create model folder
+            await util.makeDir(`${dir_name}/db/model`)
+
+            // create user.js file inside db/model/ folder
+            await util.writeFile(`${dir_name}/db/model/user.js`, files.user_model)
+
+            // create services folder
+            await util.makeDir(`${dir_name}/db/services`)
+
+            // create user_service.js file inside db folder
+            await util.writeFile(`${dir_name}/db/services/user_service.js`, files.connection)
+
+            // create controller folder
+            await util.makeDir(`${dir_name}/db/controller`)
+
+            // create user_ctrl.js file inside db folder
+            await util.writeFile(`${dir_name}/db/controller/user_ctrl.js`, files.connection)
 
             console.log('Template created')
         }

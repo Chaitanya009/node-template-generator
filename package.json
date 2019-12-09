@@ -14,6 +14,13 @@
     "type": "git",
     "url": "https://github.com/Chaitanya009/node-template-generator"
   },
+  "keywords": [
+    "node",
+    "boilerplate",
+    "template",
+    "cli",
+    "node-template"
+  ],
   "dependencies": {
     "commander": "^3.0.2",
     "inquirer": "^7.0.0"

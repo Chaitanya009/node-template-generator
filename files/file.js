@@ -7,9 +7,15 @@ require('./db/connection')
 require('./route')(app)`
 
 const route =  
-`module.exports = (app) => {
+`const user_ctrl = require('./controller/user_ctrl')
 
-    app.get('/', (req, res) => res.send('Hello World!'))
+module.exports = (app) => {
+
+    app.get('/', (req, res) => res.send('service is running'))
+
+    // user apis
+    app.post('/user', user_ctrl.create_user)
+    app.get('/user/:_id', user_ctrl.get_user)
 }`
 
 const package = 
@@ -47,6 +53,20 @@ mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true }, (err)
 
 exports.module = mongoose`
 
+const user_model = 
+`const mongoose = require('mongoose')
+
+const Schema = mongoose.Schema
+const ObjectId = Schema.Types.ObjectId
+
+const schema = new mongoose.Schema({
+    first_name: { type: String },
+    last_name: { type: String },
+    email: { type: String }
+}, { timestamps: true })
+
+module.exports = mongoose.model('user', schema)`
+
 const app = 
 `const express = require('express')
 const app = express()
@@ -72,6 +92,63 @@ app.listen(port, () => console.log('Example app listening on port 3000'))
 
 module.exports = app`
 
+const user_service =
+`const user_model = require('../db/model/user')
+
+class UserService{
+    constructor(){
+
+    }
+    save(data){
+        return new Promise((resolve, reject) => {
+            let _user = new user_model(data)
+            _user.save((err, result) => {
+                err ? reject(err) : resolve(result)
+            })
+        })
+    }
+    fetch(query){
+        return new Promise((resolve, reject) => {
+            user_model.find(query, (err, result) => {
+                err ? reject(err) : resolve(result)
+            })
+        })
+    }
+}
+
+module.exports = UserService`
+
+const user_ctrl =
+`const UserSrvc = require('../services/user_service')
+const user_service = new UserSrvc()
+
+const create_user = async (req, res) => {
+    try{
+        const result = await user_service.save(req.body)
+        res.send(result)
+    } catch(err){
+        res.status(500).send({
+            message: "Internal server error"
+        })
+    }
+}
+
+const get_user = async (req, res) => {
+    try{
+        const result = await user_service.fetch({ _id: req.params._id })
+        res.status(200).send(result)
+    } catch(err){
+        res.status(500).send({
+            message: "Internal server error"
+        })
+    }
+}
+
+module.exports = {
+    create_user,
+    get_user
+}`
+
 const env = 
 `DB_URL=mongodb://localhost:27017/test`
 
@@ -81,6 +158,9 @@ module.exports = {
     route,
     package,
     connection,
+    user_model,
+    user_service,
+    user_ctrl,
     app,
     env
 }
