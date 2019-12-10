@@ -13,6 +13,13 @@ Create new project
 $ node-template-cli create <app_name>
 ```
 
+Select database
+```sh
+? Please select database (Use arrow keys)
+❯ mongodb 
+  postgresql 
+```
+
 ## App Info
 
 ### Author
@@ -21,7 +28,7 @@ Chaitanya Thakre
 
 ### Version
 
-1.0.8
+1.0.10
 
 ### License
 

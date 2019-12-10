@@ -24,58 +24,57 @@ program
     .description('create project')
     .action(async (dir_name) => {
         if (!fs.existsSync(`./${dir_name}`)){
-
-            // prompt(questions).then(result => {
-            //     console.log('///////', result)
-            //     if(result.database == 'mongodb'){
-    
-            //     }
-            // })
+            // create project directory
             await fs.mkdirSync(`./${dir_name}`);
-            // console.log('folder created')
+            
+            prompt(questions).then(async result => {
+                if(result.database == 'mongodb'){
+                    // create index.js
+                    await util.writeFile(`${dir_name}/index.js`, files.index)
 
-            // create index.js
-            await util.writeFile(`${dir_name}/index.js`, files.index)
+                    // create app.js
+                    await util.writeFile(`${dir_name}/app.js`, files.app)
 
-            // create app.js
-            await util.writeFile(`${dir_name}/app.js`, files.app)
+                    // create route.json
+                    await util.writeFile(`${dir_name}/route.js`, files.route)
 
-            // create route.json
-            await util.writeFile(`${dir_name}/route.js`, files.route)
+                    // create package.json
+                    await util.writeFile(`${dir_name}/package.json`, files.createPackageJson(dir_name))
 
-            // create package.json
-            await util.writeFile(`${dir_name}/package.json`, files.createPackageJson(dir_name))
+                    // create .env
+                    await util.writeFile(`${dir_name}/.env`, files.env)
 
-            // create .env
-            await util.writeFile(`${dir_name}/.env`, files.env)
+                    // create db folder
+                    await util.makeDir(`${dir_name}/db`)
 
-            // create db folder
-            await util.makeDir(`${dir_name}/db`)
+                    // create connection.js file inside db folder
+                    await util.writeFile(`${dir_name}/db/connection.js`, files.connection)
 
-            // create connection.js file inside db folder
-            await util.writeFile(`${dir_name}/db/connection.js`, files.connection)
+                    // create model folder
+                    await util.makeDir(`${dir_name}/db/model`)
 
-            // create model folder
-            await util.makeDir(`${dir_name}/db/model`)
+                    // create user.js file inside db/model/ folder
+                    await util.writeFile(`${dir_name}/db/model/user.js`, files.user_model)
 
-            // create user.js file inside db/model/ folder
-            await util.writeFile(`${dir_name}/db/model/user.js`, files.user_model)
+                    // create services folder
+                    await util.makeDir(`${dir_name}/services`)
 
-            // create services folder
-            await util.makeDir(`${dir_name}/services`)
+                    // create user_service.js file inside db folder
+                    await util.writeFile(`${dir_name}/services/user_service.js`, files.user_service)
 
-            // create user_service.js file inside db folder
-            await util.writeFile(`${dir_name}/services/user_service.js`, files.user_service)
+                    // create controller folder
+                    await util.makeDir(`${dir_name}/controller`)
 
-            // create controller folder
-            await util.makeDir(`${dir_name}/controller`)
+                    // create user_ctrl.js file inside db folder
+                    await util.writeFile(`${dir_name}/controller/user_ctrl.js`, files.user_ctrl)
 
-            // create user_ctrl.js file inside db folder
-            await util.writeFile(`${dir_name}/controller/user_ctrl.js`, files.user_ctrl)
-
-            console.log('Template created')
+                    console.log('Template created')
+                } else {
+                    console.log('under maintainence please select another option')
+                }
+            })
         } else {
-            console.log(`${dir_name} already exists`)
+            console.log(`${dir_name} folder already exists`)
         }
         
     })
