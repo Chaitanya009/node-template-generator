@@ -1,11 +1,17 @@
 #!/usr/bin/env node
 const program = require('commander')
-// const { prompt } = require('inquirer')
+const { prompt } = require('inquirer')
 const fs = require('fs')
 const files = require('./files/file')
 const util = require('./utils/utility')
 
-// const dir_name = 'node-template';
+const questions = [
+    {
+        type: 'list',
+        message: 'Please select database',
+        choices: ['mongodb', 'postgresql']
+    }
+]
 
 program
     .version('1.0.4')
@@ -16,6 +22,9 @@ program
     .alias('c')
     .description('create project')
     .action(async (dir_name) => {
+        // prompt(questions).then(database_name => {
+        //     console.log('///////', database_name)
+        // })
         if (!fs.existsSync(`./${dir_name}`)){
             await fs.mkdirSync(`./${dir_name}`);
             // console.log('folder created')

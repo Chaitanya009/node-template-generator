@@ -157,7 +157,6 @@ const createPackageJson = (app_name) => {
 module.exports = {
     index,
     route,
-    package,
     connection,
     user_model,
     user_service,
