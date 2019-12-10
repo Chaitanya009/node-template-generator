@@ -8,6 +8,7 @@ const util = require('./utils/utility')
 const questions = [
     {
         type: 'list',
+        name: 'database',
         message: 'Please select database',
         choices: ['mongodb', 'postgresql']
     }
@@ -22,10 +23,14 @@ program
     .alias('c')
     .description('create project')
     .action(async (dir_name) => {
-        // prompt(questions).then(database_name => {
-        //     console.log('///////', database_name)
-        // })
         if (!fs.existsSync(`./${dir_name}`)){
+
+            // prompt(questions).then(result => {
+            //     console.log('///////', result)
+            //     if(result.database == 'mongodb'){
+    
+            //     }
+            // })
             await fs.mkdirSync(`./${dir_name}`);
             // console.log('folder created')
 
@@ -57,16 +62,16 @@ program
             await util.writeFile(`${dir_name}/db/model/user.js`, files.user_model)
 
             // create services folder
-            await util.makeDir(`${dir_name}/db/services`)
+            await util.makeDir(`${dir_name}/services`)
 
             // create user_service.js file inside db folder
-            await util.writeFile(`${dir_name}/db/services/user_service.js`, files.connection)
+            await util.writeFile(`${dir_name}/services/user_service.js`, files.user_service)
 
             // create controller folder
-            await util.makeDir(`${dir_name}/db/controller`)
+            await util.makeDir(`${dir_name}/controller`)
 
             // create user_ctrl.js file inside db folder
-            await util.writeFile(`${dir_name}/db/controller/user_ctrl.js`, files.connection)
+            await util.writeFile(`${dir_name}/controller/user_ctrl.js`, files.user_ctrl)
 
             console.log('Template created')
         } else {
