@@ -28,7 +28,7 @@ Chaitanya Thakre
 
 ### Version
 
-1.0.10
+1.1.0
 
 ### License
 
