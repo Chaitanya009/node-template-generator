@@ -153,6 +153,72 @@ const createPackageJson = (app_name) => {
     }`
 }
 
+const postgresConnection = 
+`
+const connect = async (DatabaseUrl,TableCreation)=>{
+    const {Pool,query} = require('pg');
+    //credentials
+    const dbUrl = DatabaseUrl;
+    const pool = new Pool({
+    connectionString : dbUrl
+        }
+    )
+    pool.connect()
+    .then(res=>{
+        console.log("Result is -->",res);
+    })
+    .catch(error=>{
+        console.log("Error is -->",error);
+    });
+    if(TableCreation === true)
+    {
+       
+        const query = pool.query(
+            'CREATE TABLE items(id SERIAL PRIMARY KEY, text VARCHAR(40) not null, complete BOOLEAN)')
+            .then((res)=>{
+                console.log(res);
+                pool.end();
+            })
+            .catch(error=>{
+                console.log(res);
+                pool.end(); 
+            })
+    
+     }
+}
+
+`
+const addRecords = 
+`
+const {Pool,query} = require('pg');
+const dbUrl = require('../index');
+
+const insertRecords = async (req,res)=>{
+    const pool = new Pool({
+        connectionString:dbUrl.dbURL
+    })
+    pool.connect().then(res=>{
+        console.log(res);
+    }).catch(err=>{
+        console.log(err);
+    });
+    try{
+    var query = pool.query("insert into dbname (firstName,lastName,email,mobile) "+ 
+    "values ('"+req.body.fName+"','"+req.body.lName+"','"+
+        req.body.email+"','"+req.body.mbl+"')");
+    query.on('end',(result)=>{
+        res.status(200).send('Inserted data successfully');
+    })
+}
+catch(error){
+    console.log(error);
+    res.send(error);
+}
+}
+module.exports={
+    insertRecords
+}
+`
 
 module.exports = {
     index,
@@ -163,5 +229,7 @@ module.exports = {
     user_ctrl,
     app,
     env,
-    createPackageJson
+    createPackageJson,
+    postgresConnection,
+    addRecords
 }
