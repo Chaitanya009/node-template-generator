@@ -4,6 +4,7 @@ const { prompt } = require('inquirer')
 const fs = require('fs')
 const files = require('./files/file')
 const util = require('./utils/utility')
+const { exec } = require("child_process");
 
 const questions = [
     {
@@ -68,18 +69,34 @@ program
                     // create user_ctrl.js file inside db folder
                     await util.writeFile(`${dir_name}/controller/user_ctrl.js`, files.user_ctrl)
 
+                    // await exec(`cd ${dir_name} && npm install`, (error, stdout, stderr) => {
+                    //     if (error) {
+                    //         console.log(`error: ${error.message}`);
+                    //         return;
+                    //     }
+                    //     if (stderr) {
+                    //         console.log(`stderr: ${stderr}`);
+                    //         return;
+                    //     }
+                    //     console.log(`stdout: ${stdout}`);
+                    // });
+                    try {
+                        await util.runCommand(`cd ${dir_name} && npm install`)
+                    } catch (err) {
+                        console.log(err)
+                    }
                     console.log('Template created')
                 } else {
                     console.log('under maintainence please select another option')
                 }
             })
         }
-                else if(result.database == 'postgres'){
-                    // create connection.js file inside db folder
-                    await util.writeFile(`${dir_name}/db/connection.js`,files.postgresConnection);
+        else if (result.database == 'postgres') {
+            // create connection.js file inside db folder
+            await util.writeFile(`${dir_name}/db/connection.js`, files.postgresConnection);
 
-                    
-                }   
+
+        }
         else {
             console.log(`${dir_name} folder already exists`)
         }
