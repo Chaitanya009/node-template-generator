@@ -15,7 +15,7 @@ const questions = [
 ]
 
 program
-    .version('1.0.4')
+    .version('1.1.0')
     .description('A command line tool to generate node.js template')
 
 program
@@ -23,12 +23,12 @@ program
     .alias('c')
     .description('create project')
     .action(async (dir_name) => {
-        if (!fs.existsSync(`./${dir_name}`)){
+        if (!fs.existsSync(`./${dir_name}`)) {
             // create project directory
             await fs.mkdirSync(`./${dir_name}`);
-            
+
             prompt(questions).then(async result => {
-                if(result.database == 'mongodb'){
+                if (result.database == 'mongodb') {
                     // create index.js
                     await util.writeFile(`${dir_name}/index.js`, files.index)
 
@@ -76,7 +76,7 @@ program
         } else {
             console.log(`${dir_name} folder already exists`)
         }
-        
+
     })
 
 program
