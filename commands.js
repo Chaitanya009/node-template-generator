@@ -69,19 +69,8 @@ program
                     // create user_ctrl.js file inside db folder
                     await util.writeFile(`${dir_name}/controller/user_ctrl.js`, files.user_ctrl)
 
-                    // await exec(`cd ${dir_name} && npm install`, (error, stdout, stderr) => {
-                    //     if (error) {
-                    //         console.log(`error: ${error.message}`);
-                    //         return;
-                    //     }
-                    //     if (stderr) {
-                    //         console.log(`stderr: ${stderr}`);
-                    //         return;
-                    //     }
-                    //     console.log(`stdout: ${stdout}`);
-                    // });
                     try {
-                        await util.runCommand(`cd ${dir_name} && npm install`)
+                        await util.runCommand(`cd ${dir_name} && npm install && npm start`)
                     } catch (err) {
                         console.log(err)
                     }
