@@ -4,6 +4,7 @@ const { prompt } = require('inquirer')
 const fs = require('fs')
 const files = require('./files/file')
 const util = require('./utils/utility')
+const { exec } = require("child_process");
 
 const questions = [
     {
@@ -15,7 +16,7 @@ const questions = [
 ]
 
 program
-    .version('1.0.4')
+    .version('1.1.0')
     .description('A command line tool to generate node.js template')
 
 program
@@ -23,12 +24,12 @@ program
     .alias('c')
     .description('create project')
     .action(async (dir_name) => {
-        if (!fs.existsSync(`./${dir_name}`)){
+        if (!fs.existsSync(`./${dir_name}`)) {
             // create project directory
             await fs.mkdirSync(`./${dir_name}`);
-            
+
             prompt(questions).then(async result => {
-                if(result.database == 'mongodb'){
+                if (result.database == 'mongodb') {
                     // create index.js
                     await util.writeFile(`${dir_name}/index.js`, files.index)
 
@@ -68,22 +69,27 @@ program
                     // create user_ctrl.js file inside db folder
                     await util.writeFile(`${dir_name}/controller/user_ctrl.js`, files.user_ctrl)
 
+                    try {
+                        await util.runCommand(`cd ${dir_name} && npm install && npm start`)
+                    } catch (err) {
+                        console.log(err)
+                    }
                     console.log('Template created')
                 } else {
                     console.log('under maintainence please select another option')
                 }
             })
         }
-                else if(result.database == 'postgres'){
-                    // create connection.js file inside db folder
-                    await util.writeFile(`${dir_name}/db/connection.js`,files.postgresConnection);
+        else if (result.database == 'postgres') {
+            // create connection.js file inside db folder
+            await util.writeFile(`${dir_name}/db/connection.js`, files.postgresConnection);
 
-                    
-                }   
+
+        }
         else {
             console.log(`${dir_name} folder already exists`)
         }
-        
+
     })
 
 program

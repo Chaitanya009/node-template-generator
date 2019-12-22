@@ -1,6 +1,6 @@
 {
   "name": "node-template-cli",
-  "version": "1.0.8",
+  "version": "1.1.0",
   "description": "A command line tool to generate node.js project",
   "main": "index.js",
   "preferGlobal": true,
@@ -23,6 +23,7 @@
   ],
   "dependencies": {
     "commander": "^3.0.2",
+    "execa": "^0.6.0",
     "inquirer": "^7.0.0"
   }
 }

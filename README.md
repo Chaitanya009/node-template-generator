@@ -26,9 +26,13 @@ Select database
 
 Chaitanya Thakre
 
+### Contributer
+
+Shubham Gupta
+
 ### Version
 
-1.0.10
+1.1.0
 
 ### License
 
