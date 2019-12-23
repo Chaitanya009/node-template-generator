@@ -5,6 +5,7 @@ const fs = require('fs')
 const files = require('./files/file')
 const util = require('./utils/utility')
 const { exec } = require("child_process");
+const postgres = require('./files/postgresfile');
 
 const questions = [
     {
@@ -12,6 +13,11 @@ const questions = [
         name: 'database',
         message: 'Please select database',
         choices: ['mongodb', 'postgresql']
+    },
+    {
+        name:'port',
+        message:'Please give a port',
+        default:3000
     }
 ]
 
@@ -24,7 +30,7 @@ program
     .alias('c')
     .description('create project')
     .action(async (dir_name) => {
-        if (!fs.existsSync(`./${dir_name}`)) {
+        if (!fs.existsSync(`./${dir_name}`)) 
             // create project directory
             await fs.mkdirSync(`./${dir_name}`);
 
@@ -75,22 +81,65 @@ program
                         console.log(err)
                     }
                     console.log('Template created')
-                } else {
-                    console.log('under maintainence please select another option')
-                }
-            })
-        }
+                 }
+            // else {
+            //         console.log('under maintainence please select another option')
+
+                    
+            //     }
+            // })
+        
         else if (result.database == 'postgres') {
             // create connection.js file inside db folder
-            await util.writeFile(`${dir_name}/db/connection.js`, files.postgresConnection);
+            await util.writeFile(`${dir_name}/db/postgresConnection.js`, postgres.postgresConnection);
+            // create index.js
+            await util.writeFile(`${dir_name}/index.js`, postgres.index)
 
+            // create app.js
+            await util.writeFile(`${dir_name}/app.js`, postgres.app(result.port))
+
+            // create route.json
+            await util.writeFile(`${dir_name}/route.js`, files.route)
+
+            // create package.json
+            await util.writeFile(`${dir_name}/package.json`, files.createPackageJson(dir_name))
+
+            // create .env
+            await util.writeFile(`${dir_name}/.env`, files.env)
+
+            // create db folder
+            await util.makeDir(`${dir_name}/db`)
+
+            // create connection.js file inside db folder
+            await util.writeFile(`${dir_name}/db/connection.js`, files.connection)
+
+            // create model folder
+            await util.makeDir(`${dir_name}/db/model`)
+
+            // create user.js file inside db/model/ folder
+            await util.writeFile(`${dir_name}/db/model/user.js`, files.user_model)
+
+            // create services folder
+            await util.makeDir(`${dir_name}/services`)
+
+            // create user_service.js file inside db folder
+            await util.writeFile(`${dir_name}/services/user_service.js`, files.user_service)
+
+            // create controller folder
+            await util.makeDir(`${dir_name}/controller`)
+
+            // create user_ctrl.js file inside db folder
+            await util.writeFile(`${dir_name}/controller/user_ctrl.js`, files.user_ctrl)
 
         }
         else {
             console.log(`${dir_name} folder already exists`)
         }
-
-    })
+    
+    }
+)
 
 program
     .parse(process.argv)
+
+module.exports = 
