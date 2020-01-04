@@ -83,8 +83,6 @@ program
         // else if (result.database == 'postgres') {
         //     // create connection.js file inside db folder
         //     await util.writeFile(`${dir_name}/db/connection.js`, files.postgresConnection);
-
-
         // }
         else {
             console.log(`${dir_name} folder already exists`)
