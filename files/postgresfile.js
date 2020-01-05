@@ -1,7 +1,8 @@
+
 const index = 
 `const app = require('./app')
 // connection with db
-require('./db/connection')
+require('./db/postgresConnection')
 
 // importing route.js
 require('./route')(app)`
@@ -18,21 +19,21 @@ module.exports = (app) => {
     app.get('/user/:_id', user_ctrl.get_user)
 }`
 
-const connection = 
-`const mongoose = require('mongoose')
-require('dotenv').config()
-const uri = process.env.DB_URL
+// const connection = 
+// `const mongoose = require('mongoose')
+// require('dotenv').config()
+// const uri = process.env.DB_URL
 
-mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true }, (err) => {
-    if (err) {
-        console.log('Some problem with the connection ' + err)
-    }
-    else {
-        console.log('connected to db')
-    }
-})
+// mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true }, (err) => {
+//     if (err) {
+//         console.log('Some problem with the connection ' + err)
+//     }
+//     else {
+//         console.log('connected to db')
+//     }
+// })
 
-exports.module = mongoose`
+// exports.module = mongoose`
 
 const user_model = 
 `const mongoose = require('mongoose')
@@ -48,18 +49,18 @@ const schema = new mongoose.Schema({
 
 module.exports = mongoose.model('user', schema)`
 
-const app = 
+const app = (port)=>{
 `const express = require('express')
 const app = express()
 const bodyParser = require('body-parser')
-const port = 3000
+//const port = 3000
 
 app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 
 const allowCrossDomain = (req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*');
-  ;  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
+     res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
     res.header('Access-Control-Allow-Headers', 'Origin, Content-Type, Authorization, Accept,Content-Length, X-Requested-With, X-PINGOTHER');
     if ('OPTIONS' === req.method) {
         res.sendStatus(200);
@@ -69,8 +70,8 @@ const allowCrossDomain = (req, res, next) => {
 };
 app.use(allowCrossDomain)
 
-app.listen(port, () => console.log('Example app listening on port 3000'))
-
+app.listen(port, () => console.log('Example app listening on port '+port))
+}
 module.exports = app`
 
 const user_service =
@@ -130,11 +131,10 @@ module.exports = {
     get_user
 }`
 
-const create_env = (db_url) => {
-    return `DB_URL=${db_url}`
-}
+const env = 
+`DatabaseUrl=enter Url`
 
-const create_package_json = (app_name) => {
+const createPackageJson = (app_name) => {
     return `{
         "name": "${app_name}",
         "version": "1.0.0",
@@ -154,6 +154,58 @@ const create_package_json = (app_name) => {
     }`
 }
 
+const postgresConnection = 
+`
+const connect = async (process.env.DatabaseUrl,TableCreation)=>{
+    const {Pool,query} = require('pg');
+    //credentials
+    const dbUrl = DatabaseUrl;
+    const pool = new Pool({
+    connectionString : dbUrl
+    })
+    pool.connect()
+    .then(res=>{
+        console.log("connected to db");
+    })
+    .catch(error=>{
+        console.log("Error is -->",error);
+    });
+    
+}
+
+`
+const addRecords = 
+`
+const {Pool,query} = require('pg');
+const dbUrl = require('../index');
+
+const insertRecords = async (req,res)=>{
+    const pool = new Pool({
+        connectionString:dbUrl.dbURL
+    })
+    pool.connect().then(res=>{
+        console.log(res);
+    }).catch(err=>{
+        console.log(err);
+    });
+    try{
+    var query = pool.query("insert into dbname (firstName,lastName,email,mobile) "+ 
+    "values ('"+req.body.fName+"','"+req.body.lName+"','"+
+        req.body.email+"','"+req.body.mbl+"')");
+    query.on('end',(result)=>{
+        res.status(200).send('Inserted data successfully');
+    })
+}
+catch(error){
+    console.log(error);
+    res.send(error);
+}
+}
+module.exports={
+    insertRecords
+}
+`
+
 module.exports = {
     index,
     route,
@@ -162,6 +214,8 @@ module.exports = {
     user_service,
     user_ctrl,
     app,
-    create_env,
-    create_package_json,
+    env,
+    createPackageJson,
+    postgresConnection,
+    addRecords
 }
