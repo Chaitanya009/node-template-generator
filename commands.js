@@ -57,6 +57,9 @@ program
                     // create .env
                     await util.writeFile(`${dir_name}/.env`, files.create_env(result.database_url))
 
+                    // create .gitignore
+                    await util.writeFile(`${dir_name}/.gitignore`, files.git_ignore)
+
                     // create db folder
                     await util.makeDir(`${dir_name}/db`)
 
