@@ -16,8 +16,8 @@ const questions = [
     },
     {
         type: 'input',
-        name: 'database_url',
-        message: 'Enter database url',
+        name: 'databaseUrl',
+        message: "Enter database url, if you don't have then press enter" ,
         default: 'mongodb://localhost:27017/test'
     }
     // ,{
@@ -28,7 +28,7 @@ const questions = [
 ]
 
 program
-    .version('1.1.0')
+    .version('1.1.3')
     .description('A command line tool to generate node.js template')
 
 program
@@ -52,13 +52,13 @@ program
                     await util.writeFile(`${dir_name}/route.js`, files.route)
 
                     // create package.json
-                    await util.writeFile(`${dir_name}/package.json`, files.create_package_json(dir_name))
+                    await util.writeFile(`${dir_name}/package.json`, files.createPackageJson(dir_name))
 
                     // create .env
-                    await util.writeFile(`${dir_name}/.env`, files.create_env(result.database_url))
+                    await util.writeFile(`${dir_name}/.env`, files.createEnv(result.databaseUrl))
 
                     // create .gitignore
-                    await util.writeFile(`${dir_name}/.gitignore`, files.git_ignore)
+                    await util.writeFile(`${dir_name}/.gitignore`, files.gitIgnore)
 
                     // create db folder
                     await util.makeDir(`${dir_name}/db`)
@@ -70,19 +70,19 @@ program
                     await util.makeDir(`${dir_name}/db/model`)
 
                     // create user.js file inside db/model/ folder
-                    await util.writeFile(`${dir_name}/db/model/user.js`, files.user_model)
+                    await util.writeFile(`${dir_name}/db/model/user.js`, files.userModel)
 
                     // create services folder
                     await util.makeDir(`${dir_name}/services`)
 
-                    // create user_service.js file inside db folder
-                    await util.writeFile(`${dir_name}/services/user_service.js`, files.user_service)
+                    // create userService.js file inside db folder
+                    await util.writeFile(`${dir_name}/services/user.js`, files.userService)
 
                     // create controller folder
                     await util.makeDir(`${dir_name}/controller`)
 
-                    // create user_ctrl.js file inside db folder
-                    await util.writeFile(`${dir_name}/controller/user_ctrl.js`, files.user_ctrl)
+                    // create user.js file inside controller folder
+                    await util.writeFile(`${dir_name}/controller/user.js`, files.userCtrl)
 
                     try {
                         await util.runCommand(`cd ${dir_name} && npm install && npm start`)

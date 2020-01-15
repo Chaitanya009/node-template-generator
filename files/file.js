@@ -7,15 +7,15 @@ require('./db/connection')
 require('./route')(app)`
 
 const route =  
-`const user_ctrl = require('./controller/user_ctrl')
+`const userCtrl = require('./controller/user')
 
 module.exports = (app) => {
 
     app.get('/', (req, res) => res.send('service is running'))
 
     // user apis
-    app.post('/user', user_ctrl.create_user)
-    app.get('/user/:_id', user_ctrl.get_user)
+    app.post('/user', userCtrl.createUser)
+    app.get('/user/:_id', userCtrl.getUser)
 }`
 
 const connection = 
@@ -34,7 +34,7 @@ mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true }, (err)
 
 exports.module = mongoose`
 
-const user_model = 
+const userModel = 
 `const mongoose = require('mongoose')
 
 const Schema = mongoose.Schema
@@ -73,39 +73,37 @@ app.listen(port, () => console.log('Example app listening on port 3000'))
 
 module.exports = app`
 
-const user_service =
-`const user_model = require('../db/model/user')
+const userService =
+`const userModel = require('../db/model/user')
 
-class UserService{
-    constructor(){
-
-    }
-    save(data){
-        return new Promise((resolve, reject) => {
-            let _user = new user_model(data)
-            _user.save((err, result) => {
-                err ? reject(err) : resolve(result)
-            })
+const save = (data) => {
+    return new Promise((resolve, reject) => {
+        let user = new userModel(data)
+        user.save((err, result) => {
+            err ? reject(err) : resolve(result)
         })
-    }
-    fetch(query){
-        return new Promise((resolve, reject) => {
-            user_model.find(query, (err, result) => {
-                err ? reject(err) : resolve(result)
-            })
-        })
-    }
+    })
 }
 
-module.exports = UserService`
+const fetch = (query) => {
+    return new Promise((resolve, reject) => {
+        userModel.find(query, (err, result) => {
+            err ? reject(err) : resolve(result)
+        })
+    })
+}
 
-const user_ctrl =
-`const UserSrvc = require('../services/user_service')
-const user_service = new UserSrvc()
+module.exports = {
+    save,
+    fetch
+}`
 
-const create_user = async (req, res) => {
+const userCtrl =
+`const userService = require('../services/user')
+
+const createUser = async (req, res) => {
     try{
-        const result = await user_service.save(req.body)
+        const result = await userService.save(req.body)
         res.send(result)
     } catch(err){
         res.status(500).send({
@@ -114,9 +112,9 @@ const create_user = async (req, res) => {
     }
 }
 
-const get_user = async (req, res) => {
+const getUser = async (req, res) => {
     try{
-        const result = await user_service.fetch({ _id: req.params._id })
+        const result = await userService.fetch({ _id: req.params._id })
         res.status(200).send(result)
     } catch(err){
         res.status(500).send({
@@ -126,15 +124,15 @@ const get_user = async (req, res) => {
 }
 
 module.exports = {
-    create_user,
-    get_user
+    createUser,
+    getUser
 }`
 
-const create_env = (db_url) => {
+const createEnv = (db_url) => {
     return `DB_URL=${db_url}`
 }
 
-const create_package_json = (app_name) => {
+const createPackageJson = (app_name) => {
     return `{
         "name": "${app_name}",
         "version": "1.0.0",
@@ -154,7 +152,7 @@ const create_package_json = (app_name) => {
     }`
 }
 
-const git_ignore = 
+const gitIgnore = 
 `# Logs
 logs
 *.log
@@ -222,11 +220,11 @@ module.exports = {
     index,
     route,
     connection,
-    user_model,
-    user_service,
-    user_ctrl,
+    userModel,
+    userService,
+    userCtrl,
     app,
-    create_env,
-    create_package_json,
-    git_ignore
+    createEnv,
+    createPackageJson,
+    gitIgnore
 }
