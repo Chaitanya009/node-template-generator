@@ -102,19 +102,19 @@ program
                     // await util.writeFile(`${dir_name}/app.js`, postgres.app(result.port))
 
                     // // create route.json
-                    // await util.writeFile(`${dir_name}/route.js`, files.route)
+                    // await util.writeFile(`${dir_name}/route.js`, postgres.route)
 
                     // // create package.json
-                    // await util.writeFile(`${dir_name}/package.json`, files.createPackageJson(dir_name))
+                    // await util.writeFile(`${dir_name}/package.json`, postgres.createPackageJson(dir_name))
 
                     // // create .env
-                    // await util.writeFile(`${dir_name}/.env`, files.env)
+                    // await util.writeFile(`${dir_name}/.env`, postgres.env(result.databaseUrl))
 
                     // // create db folder
                     // await util.makeDir(`${dir_name}/db`)
 
                     // // create connection.js file inside db folder
-                    // await util.writeFile(`${dir_name}/db/connection.js`, files.connection)
+                    // await util.writeFile(`${dir_name}/db/connection.js`, postgres.connection())
 
                     // // create model folder
                     // await util.makeDir(`${dir_name}/db/model`)

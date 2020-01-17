@@ -131,8 +131,9 @@ module.exports = {
     get_user
 }`
 
-const env = 
-`DatabaseUrl=enter Url`
+const env = (db_url) => {
+    return `DB_URL=${db_url}`
+}
 
 const createPackageJson = (app_name) => {
     return `{
@@ -159,7 +160,7 @@ const postgresConnection =
 const connect = async (process.env.DatabaseUrl,TableCreation)=>{
     const {Pool,query} = require('pg');
     //credentials
-    const dbUrl = DatabaseUrl;
+    const dbUrl = process.env.DB_URL;
     const pool = new Pool({
     connectionString : dbUrl
     })
