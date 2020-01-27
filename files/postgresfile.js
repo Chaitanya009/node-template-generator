@@ -1,14 +1,14 @@
 
-const index = 
-`const app = require('./app')
+const index =
+    `const app = require('./app')
 // connection with db
 require('./db/postgresConnection')
 
 // importing route.js
 require('./route')(app)`
 
-const route =  
-`const user_ctrl = require('./controller/user_ctrl')
+const route =
+    `const user_ctrl = require('./controller/user_ctrl')
 
 module.exports = (app) => {
 
@@ -19,24 +19,8 @@ module.exports = (app) => {
     app.get('/user/:_id', user_ctrl.get_user)
 }`
 
-// const connection = 
-// `const mongoose = require('mongoose')
-// require('dotenv').config()
-// const uri = process.env.DB_URL
-
-// mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true }, (err) => {
-//     if (err) {
-//         console.log('Some problem with the connection ' + err)
-//     }
-//     else {
-//         console.log('connected to db')
-//     }
-// })
-
-// exports.module = mongoose`
-
-const user_model = 
-`const mongoose = require('mongoose')
+const user_model =
+    `const mongoose = require('mongoose')
 
 const Schema = mongoose.Schema
 const ObjectId = Schema.Types.ObjectId
@@ -49,11 +33,11 @@ const schema = new mongoose.Schema({
 
 module.exports = mongoose.model('user', schema)`
 
-const app = (port)=>{
-`const express = require('express')
+const app =
+    `const express = require('express')
 const app = express()
 const bodyParser = require('body-parser')
-//const port = 3000
+const port = 3000
 
 app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
@@ -70,12 +54,13 @@ const allowCrossDomain = (req, res, next) => {
 };
 app.use(allowCrossDomain)
 
-app.listen(port, () => console.log('Example app listening on port '+port))
-}
+app.listen(port, () => console.log('Example app listening on port 3000'))
+
 module.exports = app`
 
+
 const user_service =
-`const user_model = require('../db/model/user')
+    `const user_model = require('../db/model/user')
 
 class UserService{
     constructor(){
@@ -101,7 +86,7 @@ class UserService{
 module.exports = UserService`
 
 const user_ctrl =
-`const UserSrvc = require('../services/user_service')
+    `const UserSrvc = require('../services/user_service')
 const user_service = new UserSrvc()
 
 const create_user = async (req, res) => {
@@ -155,28 +140,30 @@ const createPackageJson = (app_name) => {
     }`
 }
 
-const postgresConnection = 
-`
-const connect = async (process.env.DatabaseUrl,TableCreation)=>{
-    const {Pool,query} = require('pg');
-    //credentials
-    const dbUrl = process.env.DB_URL;
-    const pool = new Pool({
-    connectionString : dbUrl
-    })
-    pool.connect()
-    .then(res=>{
-        console.log("connected to db");
-    })
-    .catch(error=>{
-        console.log("Error is -->",error);
-    });
+const postgresConnection =
+    `const { Pool, query } = require('pg');
+    require('dotenv').config()
     
-}
-
-`
-const addRecords = 
-`
+    
+    const connect = async (TableCreation) => {
+        //credentials
+        const dbUrl = process.env.DB_URL;
+        const pool = new Pool({
+            connectionString: dbUrl
+        })
+        pool.connect()
+            .then(res => {
+                console.log("connected to db");
+            })
+            .catch(error => {
+                console.log("Error is -->", error);
+            });
+    
+    }
+    
+    connect()`
+const addRecords =
+    `
 const {Pool,query} = require('pg');
 const dbUrl = require('../index');
 
@@ -210,7 +197,6 @@ module.exports={
 module.exports = {
     index,
     route,
-    connection,
     user_model,
     user_service,
     user_ctrl,
@@ -219,4 +205,4 @@ module.exports = {
     createPackageJson,
     postgresConnection,
     addRecords
-}
+};
