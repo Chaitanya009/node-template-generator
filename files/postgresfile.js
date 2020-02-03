@@ -8,15 +8,15 @@ require('./db/postgresConnection')
 require('./route')(app)`
 
 const route =
-    `const user_ctrl = require('./controller/user_ctrl')
+    `//const user_ctrl = require('./controller/user_ctrl')
 
 module.exports = (app) => {
 
     app.get('/', (req, res) => res.send('service is running'))
 
     // user apis
-    app.post('/user', user_ctrl.create_user)
-    app.get('/user/:_id', user_ctrl.get_user)
+    //app.post('/user', user_ctrl.create_user)
+    //app.get('/user/:_id', user_ctrl.get_user)
 }`
 
 
@@ -74,16 +74,16 @@ const user_service =
     
     }
     const insertRecords = async (req,res)=>{
-        pool.query("insert into users (firstname,lastname,address,email,phone_number) 
-        values ('"+req.body.firstname+"','"+req.body.lastname+"','"+
-            req.body.email+"','"+req.body.phone_number+"','"+req.body.address+"')")
-            .then((result)=>{
-                res.status(200).send(result);
-            })
-            .catch((error){
-                console.log(error);
-                res.send(error);
-            })
+        // pool.query("insert into users (firstname,lastname,address,email,phone_number) 
+        // values ('"+req.body.firstname+"','"+req.body.lastname+"','"+
+        //     req.body.email+"','"+req.body.phone_number+"','"+req.body.address+"')")
+        //     .then((result)=>{
+        //         res.status(200).send(result);
+        //     })
+        //     .catch((error) =>{
+        //         console.log(error);
+        //         res.send(error);
+        //     })
         }
     module.exports={
         fetchall,
@@ -109,7 +109,8 @@ const createPackageJson = (app_name) => {
         "dependencies": {
             "express": "^4.17.1",
             "mongoose": "^5.6.9",
-            "dotenv": "^8.1.0"
+            "dotenv": "^8.1.0",
+            "pg": "^7.18.1"
         }
     }`
 }
@@ -138,10 +139,10 @@ const postgresConnection =
                 console.log(result);
                 pool.end();
             })
-            .catch(error)=>{
+            .catch((error)=>{
                 console.log(error);
                 pool.end();
-            }; 
+            }); 
     
     }
     module.exports={
