@@ -68,10 +68,10 @@ program
                         await util.writeFile(`${dir_name}/db/connection.js`, files.connection)
 
                         // create model folder
-                        await util.makeDir(`${dir_name}/db/model`)
+                       // await util.makeDir(`${dir_name}/db/model`)
 
                         // create user.js file inside db/model/ folder
-                        await util.writeFile(`${dir_name}/db/model/user.js`, files.userModel)
+                       // await util.writeFile(`${dir_name}/db/model/user.js`, files.userModel)
 
                         // create services folder
                         await util.makeDir(`${dir_name}/services`)
@@ -80,10 +80,10 @@ program
                         await util.writeFile(`${dir_name}/services/user.js`, files.userService)
 
                         // create controller folder
-                        await util.makeDir(`${dir_name}/controller`)
+                        //await util.makeDir(`${dir_name}/controller`)
 
                         // create user.js file inside controller folder
-                        await util.writeFile(`${dir_name}/controller/user.js`, files.userCtrl)
+                        //await util.writeFile(`${dir_name}/controller/user.js`, files.userCtrl)
 
                         await util.runCommand(`cd ${dir_name} && npm install && npm start`)
                     } catch (err) {

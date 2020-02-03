@@ -19,19 +19,7 @@ module.exports = (app) => {
     app.get('/user/:_id', user_ctrl.get_user)
 }`
 
-const user_model =
-    `const mongoose = require('mongoose')
 
-const Schema = mongoose.Schema
-const ObjectId = Schema.Types.ObjectId
-
-const schema = new mongoose.Schema({
-    first_name: { type: String },
-    last_name: { type: String },
-    email: { type: String }
-}, { timestamps: true })
-
-module.exports = mongoose.model('user', schema)`
 
 const app =
     `const express = require('express')
@@ -60,61 +48,47 @@ module.exports = app`
 
 
 const user_service =
-    `const user_model = require('../db/model/user')
+    `const { Pool, query } = require('pg');
+     require('dotenv').config()
 
-class UserService{
-    constructor(){
-
-    }
-    save(data){
-        return new Promise((resolve, reject) => {
-            let _user = new user_model(data)
-            _user.save((err, result) => {
-                err ? reject(err) : resolve(result)
+     const dbUrl = process.env.DB_URL;
+        const pool = new Pool({
+            connectionString: dbUrl
+        })
+        pool.connect()
+            .then(res => {
+                
             })
-        })
+            .catch(error => {
+                console.log("Error is -->", error);
+            });
+            
+
+    const fetchall = async (req,res) => {   
+                pool.query("select * from users")
+                .then((result)=>{res.status(200).send(result)})
+                .catch((error)
+                {
+                    res.send(error);
+                });
+    
     }
-    fetch(query){
-        return new Promise((resolve, reject) => {
-            user_model.find(query, (err, result) => {
-                err ? reject(err) : resolve(result)
+    const insertRecords = async (req,res)=>{
+        pool.query("insert into users (firstname,lastname,address,email,phone_number) 
+        values ('"+req.body.firstname+"','"+req.body.lastname+"','"+
+            req.body.email+"','"+req.body.phone_number+"','"+req.body.address+"')")
+            .then((result)=>{
+                res.status(200).send(result);
             })
-        })
-    }
-}
-
-module.exports = UserService`
-
-const user_ctrl =
-    `const UserSrvc = require('../services/user_service')
-const user_service = new UserSrvc()
-
-const create_user = async (req, res) => {
-    try{
-        const result = await user_service.save(req.body)
-        res.send(result)
-    } catch(err){
-        res.status(500).send({
-            message: "Internal server error"
-        })
-    }
-}
-
-const get_user = async (req, res) => {
-    try{
-        const result = await user_service.fetch({ _id: req.params._id })
-        res.status(200).send(result)
-    } catch(err){
-        res.status(500).send({
-            message: "Internal server error"
-        })
-    }
-}
-
-module.exports = {
-    create_user,
-    get_user
-}`
+            .catch((error){
+                console.log(error);
+                res.send(error);
+            })
+        }
+    module.exports={
+        fetchall,
+        insertRecords
+    }`
 
 const env = (db_url) => {
     return `DB_URL=${db_url}`
@@ -158,51 +132,28 @@ const postgresConnection =
             .catch(error => {
                 console.log("Error is -->", error);
             });
+
+            pool.query("create table users(firstname varchar(255), lastname varchar(255), address VARCHAR(255), email VARCHAR(255),phone_number INT)")
+            .then((result)=>{
+                console.log(result);
+                pool.end();
+            })
+            .catch(error)=>{
+                console.log(error);
+                pool.end();
+            }; 
     
     }
-    
-    connect()`
-const addRecords =
-    `
-const {Pool,query} = require('pg');
-const dbUrl = require('../index');
-
-const insertRecords = async (req,res)=>{
-    const pool = new Pool({
-        connectionString:dbUrl.dbURL
-    })
-    pool.connect().then(res=>{
-        console.log(res);
-    }).catch(err=>{
-        console.log(err);
-    });
-    try{
-    var query = pool.query("insert into dbname (firstName,lastName,email,mobile) "+ 
-    "values ('"+req.body.fName+"','"+req.body.lName+"','"+
-        req.body.email+"','"+req.body.mbl+"')");
-    query.on('end',(result)=>{
-        res.status(200).send('Inserted data successfully');
-    })
-}
-catch(error){
-    console.log(error);
-    res.send(error);
-}
-}
-module.exports={
-    insertRecords
-}
-`
+    module.exports={
+        connect
+    }`
 
 module.exports = {
     index,
     route,
-    user_model,
     user_service,
-    user_ctrl,
     app,
     env,
     createPackageJson,
-    postgresConnection,
-    addRecords
+    postgresConnection
 };
