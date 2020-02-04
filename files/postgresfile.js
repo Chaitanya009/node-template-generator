@@ -86,7 +86,7 @@ const user_service =
                  res.send(error);
              })
         }
-    const delete =  async (req.res)=>{
+    const Delete =  async (req.res)=>{
         if(req.body.phoneNumber){
             pool.query("delete from users where phone_number = $1",[req.body.phone_number])
             .then(()=>{
@@ -98,8 +98,8 @@ const user_service =
         }
         else {
             pool.query("Delete from  users")
-            .then((()=>{
-                res.status(200).send({"message":"Deleted table successfully"})
+            .then(()=>{
+                res.status(200).send({"message":"Deleted table successfully"})})
             .catch((error)=>{
                 res.status(500).send(error);
             })
@@ -108,7 +108,7 @@ const user_service =
     module.exports={
         fetchall,
         insertRecords,
-        delete
+        Delete
     }`
 
 const env = (db_url) => {
