@@ -2,7 +2,8 @@
 const index =
     `const app = require('./app')
 // connection with db
-require('./db/postgresConnection')
+var connection = require('./db/postgresConnection')
+connection()
 
 // importing route.js
 require('./route')(app)`
@@ -74,20 +75,40 @@ const user_service =
     
     }
     const insertRecords = async (req,res)=>{
-        // pool.query("insert into users (firstname,lastname,address,email,phone_number) 
-        // values ('"+req.body.firstname+"','"+req.body.lastname+"','"+
-        //     req.body.email+"','"+req.body.phone_number+"','"+req.body.address+"')")
-        //     .then((result)=>{
-        //         res.status(200).send(result);
-        //     })
-        //     .catch((error) =>{
-        //         console.log(error);
-        //         res.send(error);
-        //     })
+         pool.query("insert into users (firstname,lastname,address,email,phone_number) 
+         values($1,$2,$3,$4,$5,$6)",[req.body.firstname,req.body.lastname,req.body.address,
+            req.body.email,req.body.phone_number])
+             .then((result)=>{
+                 res.status(200).send(result);
+             })
+             .catch((error) =>{
+                 console.log(error);
+                 res.send(error);
+             })
         }
+    const delete =  async (req.res)=>{
+        if(req.body.phoneNumber){
+            pool.query("delete from users where phone_number = $1",[req.body.phone_number])
+            .then(()=>{
+                res.status(200).send({"message":"Successfully deleted record"})
+            })
+            .catch((error)=>{
+                res.status(500).send(error)
+            })
+        }
+        else {
+            pool.query("Delete from  users")
+            .then((()=>{
+                res.status(200).send({"message":"Deleted table successfully"})
+            .catch((error)=>{
+                res.status(500).send(error);
+            })
+        }
+    }
     module.exports={
         fetchall,
-        insertRecords
+        insertRecords,
+        delete
     }`
 
 const env = (db_url) => {
