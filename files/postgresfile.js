@@ -3,7 +3,7 @@ const index =
     `const app = require('./app')
 // connection with db
 var connection = require('./db/postgresConnection')
-connection()
+
 
 // importing route.js
 require('./route')(app)`
@@ -68,16 +68,14 @@ const user_service =
     const fetchall = async (req,res) => {   
                 pool.query("select * from users")
                 .then((result)=>{res.status(200).send(result)})
-                .catch((error)
+                .catch((error)=>
                 {
                     res.send(error);
                 });
     
     }
     const insertRecords = async (req,res)=>{
-         pool.query("insert into users (firstname,lastname,address,email,phone_number) 
-         values($1,$2,$3,$4,$5,$6)",[req.body.firstname,req.body.lastname,req.body.address,
-            req.body.email,req.body.phone_number])
+         pool.query("insert into users (firstname,lastname,address,email,phone_number) values($1,$2,$3,$4,$5,$6)",[req.body.firstname,req.body.lastname,req.body.address,req.body.email,req.body.phone_number])
              .then((result)=>{
                  res.status(200).send(result);
              })
@@ -166,6 +164,7 @@ const postgresConnection =
             }); 
     
     }
+    connect();
     module.exports={
         connect
     }`
