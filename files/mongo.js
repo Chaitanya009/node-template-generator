@@ -1,13 +1,13 @@
-const index = 
-`const app = require('./app')
+const index =
+    `const app = require('./app')
 // connection with db
 require('./db/connection')
 
 // importing route.js
 require('./route')(app)`
 
-const route =  
-`const userCtrl = require('./controller/user')
+const route =
+    `const userCtrl = require('./controller/user')
 
 module.exports = (app) => {
 
@@ -18,8 +18,8 @@ module.exports = (app) => {
     app.get('/user/:_id', userCtrl.getUser)
 }`
 
-const connection = 
-`const mongoose = require('mongoose')
+const connection =
+    `const mongoose = require('mongoose')
 require('dotenv').config()
 const uri = process.env.DB_URL
 
@@ -34,8 +34,8 @@ mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true }, (err)
 
 exports.module = mongoose`
 
-const userModel = 
-`const mongoose = require('mongoose')
+const userModel =
+    `const mongoose = require('mongoose')
 
 const Schema = mongoose.Schema
 const ObjectId = Schema.Types.ObjectId
@@ -48,8 +48,8 @@ const schema = new mongoose.Schema({
 
 module.exports = mongoose.model('user', schema)`
 
-const app = 
-`const express = require('express')
+const app =
+    `const express = require('express')
 const app = express()
 const bodyParser = require('body-parser')
 const port = 3000
@@ -74,7 +74,7 @@ app.listen(port, () => console.log('Example app listening on port 3000'))
 module.exports = app`
 
 const userService =
-`const userModel = require('../db/model/user')
+    `const userModel = require('../db/model/user')
 
 const save = (data) => {
     return new Promise((resolve, reject) => {
@@ -99,7 +99,7 @@ module.exports = {
 }`
 
 const userCtrl =
-`const userService = require('../services/user')
+    `const userService = require('../services/user')
 
 const createUser = async (req, res) => {
     try{
@@ -152,8 +152,8 @@ const createPackageJson = (app_name) => {
     }`
 }
 
-const gitIgnore = 
-`# Logs
+const gitIgnore =
+    `# Logs
 logs
 *.log
 npm-debug.log*
@@ -214,7 +214,7 @@ typings/
 
 # next.js build output
 .next
-` 
+`
 
 module.exports = {
     index,

@@ -2,10 +2,10 @@
 const program = require('commander')
 const { prompt } = require('inquirer')
 const fs = require('fs')
-const files = require('./files/file')
+const files = require('./files/mongo')
 const util = require('./utils/utility')
 const { exec } = require("child_process");
-const postgres = require('./files/postgresfile');
+const postgres = require('./files/postgres');
 
 const questions = [
     {
@@ -107,13 +107,13 @@ program
                         await util.writeFile(`${dir_name}/package.json`, postgres.createPackageJson(dir_name))
 
                         // create .env
-                        await util.writeFile(`${dir_name}/.env`, postgres.env(result.databaseUrl))
+                        await util.writeFile(`${dir_name}/.env`, postgres.createEnv(result.databaseUrl))
 
                         // create db folder
                         await util.makeDir(`${dir_name}/db`)
 
                         // create connection.js file inside db folder
-                        await util.writeFile(`${dir_name}/db/postgresConnection.js`, postgres.postgresConnection);
+                        await util.writeFile(`${dir_name}/db/connection.js`, postgres.connection);
 
                         // create model folder
                         // await util.makeDir(`${dir_name}/db/model`)
@@ -125,13 +125,13 @@ program
                         await util.makeDir(`${dir_name}/services`)
 
                         // create user_service.js file inside db folder
-                        await util.writeFile(`${dir_name}/services/user_service.js`, postgres.user_service)
+                        await util.writeFile(`${dir_name}/services/user.js`, postgres.userService)
 
                         // create controller folder
-                        // await util.makeDir(`${dir_name}/controller`)
+                        await util.makeDir(`${dir_name}/controller`)
 
                         // create user_ctrl.js file inside db folder
-                        // await util.writeFile(`${dir_name}/controller/user_ctrl.js`, postgres.user_ctrl)
+                        await util.writeFile(`${dir_name}/controller/user.js`, postgres.userCtrl)
 
                         await util.runCommand(`cd ${dir_name} && npm install && npm start`)
                     } catch (error) {
